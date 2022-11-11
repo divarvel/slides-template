@@ -59,3 +59,9 @@ test = do
 | invocation. The leading `|` character allows to preserve line breaks,
 | that's convenient in notes
 :::
+
+---
+
+:::bigimage
+![](./assets/puna.jpg)
+:::
