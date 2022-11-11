@@ -251,9 +251,7 @@ $endfor$
       const pw = p.offsetWidth;
       const w = node.offsetWidth;
       node.style.transform = `scale($${pw / w})`;
-      console.log(node.getBoundingClientRect());
       p.style.height = (node.getBoundingClientRect().height / 2) + "px";
-      console.log(p.style.height);
     }
   }
 
