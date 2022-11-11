@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+$if(light)$
+<html class="light">
+$else$
+<html>
+$endif$
+<head>
+<meta charset="utf-8">
+$for(author-meta)$
+  <meta name="author" content="$author-meta$" />
+$endfor$
+$if(date-meta)$
+  <meta name="dcterms.date" content="$date-meta$" />
+$endif$
+  <title>$if(title-prefix)$$title-prefix$ - $endif$$if(pagetitle)$$pagetitle$$endif$</title>
+$if(highlighting-css)$
+  <style type="text/css">
+$highlighting-css$
+  </style>
+$endif$
+$if(css)$
+$for(css)$
+  <link rel="stylesheet" href="$css$" $if(html5)$$else$type="text/css" $endif$/>
+$endfor$
+$else$
+<style>
+  html, .view body { background-color: black; }
+  body, .view section { background-color: white; }
+
+  section { left: -150%; }
+  section[aria-selected] { left: 0; }
+  section[aria-selected] ~ section { left: +150% }
+
+  .loading {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+  }
+
+  body.loaded .loading {
+    display: none;
+  }
+
+  $if(ratio43)$
+  $else$
+  /* Force a 16/9 ratio (by default, dzslides uses a 4/3 ratio) */
+  body.loaded {
+    height: 450px;
+    margin-top: -225px;
+  }
+  $endif$
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+$endif$
+$if(math)$
+  $math$
+$endif$
+$for(header-includes)$
+  $header-includes$
+$endfor$
+</head>
+<body>
+<div class="loading">Loading</div>
+$dzslides-core$
+<style>
+  $if(display-notes)$
+  [role="note"] {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(256,256,256,0.4);
+    font-size: 12px;
+  }
+  $endif$
+
+  :root {
+    --primary: #FCF6F3;
+    --secondary: #D4B499;
+    --background: #3F5569;
+  }
+
+  :root.light {
+    --primary: #3F5569;
+    --secondary: #889EAF;
+    --background: #FCF6F3;
+  }
+
+  .slide {
+    font-family: "Noto Sans", "sans-serif";
+    /*
+    color: #432c7a;
+    background-color: #fce2db;
+    color: #B73E3E;
+    background-color: #EDDBC0;
+    color: #E14D2A;
+    background-color: #FFF8EA;
+    color: #FFF8EA;
+    background-color: #820000;
+
+    color: #F3D5C0;
+    background-color: #506D84;
+    #D4B499
+    #889EAF
+    color: #FCF6F3;
+    background-color: #3F5569;
+    color: #3F5569;
+    background-color: #FCF6F3;
+    */
+    color: var(--primary);
+    background-color: var(--background);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Display the first slide element on top */
+  .slide>*:first-child {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Center an element if it's alone in the slide */
+  .slide>*:first-child:last-child,
+  /* Center elements coming after the first one */
+  .slide>*:nth-child(n+2),
+  /* Center elements when explicitly asked for */
+  .slide>.centered {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+  .slide>*:first-child:has(+ [role=note]) {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  .slide>*.top{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+    text-align: center;
+  }
+
+  ul {
+    text-align: right;
+    padding-right: 1em;
+    border-right: 4px solid var(--primary);
+    margin-left: 2rem;
+    margin-right: auto;
+    list-style-type: none;
+  }
+
+  li {
+    font-size: 1.5rem;
+    min-width: 200px;
+  }
+
+  a {
+    color: var(--primary);
+  }
+
+  a:hover, a:active, a:focus {
+    color: var(--secondary);
+  }
+
+  .sourceCode {
+    font-size: 14px;
+  }
+
+  .jumbogroup {
+    text-align: center;
+  }
+
+  .jumbo {
+    text-transform: uppercase;
+    display: inline-block;
+    transform-origin: 50% 0;
+    transform: translate3d(0, 0, 0);
+  }
+
+  /*
+  .sourceCode span.fu, .sourceCode span.kw, .sourceCode span.dv {
+      color: var(--primary);
+  }
+  .sourceCode span.dt, .sourceCode span.st, .sourceCode span.ch {
+      color: var(--primary);
+  }
+  .sourceCode span.ot, .sourceCode span.co, .sourceCode span.op {
+      color: var(--primary);
+  }
+  */
+
+  .title-slide h1 {
+    font-size: 4rem;
+  }
+
+  .title-slide .authors {
+    position: absolute;
+    bottom: 2em;
+    right: 2em;
+  }
+
+  .author-slide h1 {
+    text-align: left;
+    font-size: 3rem;
+  }
+</style>
+$if(title)$
+<section class="slide title-slide">
+  <div>
+  <h1 class="title">$title$</h1>
+  <footer class="authors">
+$for(author)$
+  <div class="author">$author.name$</div>
+$endfor$
+  </footer>
+  </div>
+</section>
+$endif$
+$for(author)$
+<section class="slide author-slide">
+  <h1 class="title"><code>$$ whoami</code></h1>
+  <ul>
+    <li>$author.name$</li>
+    <li>$author.company$</li>
+    <li>$author.socialmedia$</li>
+  </ul>
+</section>
+$endfor$
+$for(include-before)$
+$include-before$
+$endfor$
+$body$
+$for(include-after)$
+$include-after$
+$endfor$
+
+<script>
+  function makeJumbo(slide) {
+    const nodes = slide.querySelectorAll(".jumbo");
+    for(let node of [... nodes]) {
+      node.style.transform = `scale(1);`;
+      const p = node.parentNode;
+      const pw = p.offsetWidth;
+      const w = node.offsetWidth;
+      node.style.transform = `scale($${pw / w})`;
+      console.log(node.getBoundingClientRect());
+      p.style.height = (node.getBoundingClientRect().height / 2) + "px";
+      console.log(p.style.height);
+    }
+  }
+
+  document.querySelectorAll(".slide").forEach((node) => {
+    const obs = new MutationObserver((mutationList) => {
+      for(let m of mutationList) {
+        if(m.attributeName !== "aria-selected") break;
+        makeJumbo(node);
+        obs.disconnect();
+        return;
+      };
+    });
+    obs.observe(node, { attributes: true });
+  });
+
+</script>
+
+</body>
+</html>
