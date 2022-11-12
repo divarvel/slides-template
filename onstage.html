@@ -19,7 +19,12 @@
 </div>
 
 <div id="slidecount">?</div>
+
 <button id="popup-button" onclick="Dz.popup()">Pop-up</button>
+
+<div id="remaining-time" onClick="Dz.handleCountDownClick()">
+  <span id="remaining-hours">00</span>:<span id="remaining-minutes">00</span>:<span id="remaining-seconds">00</span>
+</div>
 
 <div id="time">
   <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
@@ -84,6 +89,21 @@
     width: 200px;
   }
 
+  #remaining-time {
+    cursor: pointer;
+    background: #888;
+    border-radius: 10px;
+    font-size: 40px;
+    font-weight: bold;
+    height: 52px;
+    line-height: 52px;
+    bottom: 88px;
+    right: 30px;
+    position: absolute;
+    text-align: center;
+    width: 200px;
+  }
+
   iframe {
     border: none;
     height: 100%;
@@ -130,15 +150,17 @@
     border-bottom-right-radius: 10px;
     border-top: 4px solid #555;
     bottom: 174px;
-    width: 200px;
-    right: 30px;
+    width: 100px;
+    left: calc(50% - 50px);
   }
 
   #popup-button {
-    bottom: 88px;
+    /*bottom: 88px; */
+    bottom: 174px;
     background: #888;
     border: none;
-    border-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     color: #FFF;
     cursor: pointer;
     height: 52px;
@@ -297,17 +319,66 @@
       aMsg.push(encodeURIComponent(arguments[i]));
     aWin.postMessage(aMsg.join(" "), "*");
   }
+
+  var addZero = function(num) {
+    return num < 10 ? '0' + num : num;
+  };
   
   Dz.startClock = function() {
-    var addZero = function(num) {
-      return num < 10 ? '0' + num : num;
-    }
     setInterval(function() {
       var now = new Date();
       $("#hours").innerHTML = addZero(now.getHours());
       $("#minutes").innerHTML = addZero(now.getMinutes());
       $("#seconds").innerHTML = addZero(now.getSeconds());
+
+      if(Dz.countDown.started) {
+        Dz.countDown.elapsed ++;
+        let remaining = Dz.countDown.duration - Dz.countDown.elapsed;
+        if(remaining < 0) return;
+        let { hours, minutes, seconds } = computeTime(remaining);
+        $("#remaining-hours").innerHTML = addZero(hours);
+        $("#remaining-minutes").innerHTML = addZero(minutes);
+        $("#remaining-seconds").innerHTML = addZero(seconds);
+      }
     }, 1000);
+  }
+
+  Dz.countDown = {
+    duration: null,
+    elapsed: 0,
+    started: false,
+  }
+
+  var computeTime = function(duration) {
+    var hours = Math.floor(duration / 3600);
+    var minutes = Math.floor((duration - hours * 3600) / 60);
+    var seconds = duration - hours * 3600 - minutes * 60;
+    return { hours, minutes, seconds };
+  }
+
+  Dz.setCountDown = function() {
+    var durationStr = prompt("Set timer duration (hh:mm:ss");
+    if(!durationStr) return;
+    let duration = durationStr.split(":").reduce((acc, elem) => {
+      return acc * 60 + parseInt(elem, 10);
+    }, 0);
+    Dz.countDown.duration = duration;
+    let { hours, minutes, seconds } = computeTime(duration);
+    $("#remaining-hours").innerHTML = addZero(hours);
+    $("#remaining-minutes").innerHTML = addZero(minutes);
+    $("#remaining-seconds").innerHTML = addZero(seconds);
+  }
+
+  Dz.toggleCountDown = function() {
+    Dz.countDown.started = ! Dz.countDown.started;
+  }
+
+  Dz.handleCountDownClick = function() {
+    if(Dz.countDown.duration === null) {
+      Dz.setCountDown();
+    } else {
+      Dz.toggleCountDown();
+    }
   }
 
   function init() {
