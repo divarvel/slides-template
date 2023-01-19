@@ -22,10 +22,24 @@ author:
 
 ---
 
+# Centered [[incremental]{}]{.incremental} title
+
+---
+
 # Top title
 
 - With
 - content
+
+---
+
+# Top title
+
+::: incremental
+- a
+- b
+- c
+:::
 
 ---
 

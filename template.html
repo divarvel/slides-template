@@ -31,6 +31,14 @@ $else$
   section[aria-selected] { left: 0; }
   section[aria-selected] ~ section { left: +150% }
 
+  /* Incremental elements */
+  /* By default, visible */
+  .incremental > * { opacity: 1; }
+  /* The current item */
+  .incremental > *[aria-selected] { opacity: 1; }
+  /* The items to-be-selected */
+  .incremental > *[aria-selected] ~ * { opacity: 0; }
+
   .loading {
     display: block;
     position: absolute;
@@ -153,8 +161,6 @@ $dzslides-core$
 
   ul {
     text-align: right;
-    padding-right: 1em;
-    border-right: 4px solid var(--primary);
     margin-left: 2rem;
     margin-right: auto;
     list-style-type: none;
@@ -163,6 +169,8 @@ $dzslides-core$
   li {
     font-size: 1.5rem;
     min-width: 200px;
+    padding-right: 1em;
+    border-right: 4px solid var(--primary);
   }
 
   a {
@@ -283,6 +291,15 @@ $endfor$
       node.style.transform = `scale($${pw / w})`;
       p.style.height = (node.getBoundingClientRect().height / 2) + "px";
     }
+  }
+
+  // When surrounding a list with an incremental marker in markdown,
+  // pandoc adds the .incremental to the ul tag and wraps it in a
+  // naked div tag, which messes up with the CSS, so we remove the
+  // intermediary div
+  const incrementals = document.querySelectorAll("div>.incremental");
+  for(let ul of [... incrementals]) {
+    ul.parentNode.replaceWith(ul);
   }
 
   document.querySelectorAll(".slide").forEach((node) => {
