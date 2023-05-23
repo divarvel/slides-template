@@ -25,8 +25,10 @@ $endfor$
 $else$
 <style>
   html, .view body { background-color: black; }
-  body, .view section { background-color: white; }
-
+  .view section .incremental {
+    visibility: visible;
+    opacity: 1;
+  }
   section { left: -150%; }
   section[aria-selected] { left: 0; }
   section[aria-selected] ~ section { left: +150% }
