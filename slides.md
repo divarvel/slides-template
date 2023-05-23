@@ -57,6 +57,10 @@ author:
 
 ---
 
+# Color switch []{.make-alternate}
+
+---
+
 ```haskell
 test :: Test
 test = do

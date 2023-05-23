@@ -129,6 +129,17 @@ $dzslides-core$
     flex-direction: column;
   }
 
+  .slide:has(.make-alternate) {
+    color: var(--primary);
+    background-color: var(--secondary);
+  }
+
+  /* `:has()` is not supported by firefox yet */
+  .slide.alternate {
+    color: var(--primary);
+    background-color: var(--secondary);
+  }
+
   /* Display the first slide element on top */
   .slide>*:first-child {
     margin-top: 1rem;
@@ -315,6 +326,9 @@ $endfor$
     let c = [... node.children];
     if(c.length > 1 && c.at(-1)?.getAttribute("role") === "note") {
       c.at(-2).classList.add("centered");
+    }
+    if (node.querySelector(".make-alternate")) {
+      node.classList.add("alternate");
     }
   });
 
