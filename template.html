@@ -76,8 +76,7 @@ $endfor$
 <div class="loading">Loading</div>
 $dzslides-core$
 <style>
-  $if(display-notes)$
-  [role="note"] {
+  [role="note"].display {
     color: var(--primary);
     background-color: var(--background);
     opacity: 0.8;
@@ -89,7 +88,6 @@ $dzslides-core$
     font-size: 12px;
     z-index: 15000;
   }
-  $endif$
 
   :root {
     --primary: #FCF6F3;
@@ -319,6 +317,21 @@ $endfor$
       c.at(-2).classList.add("centered");
     }
   });
+
+  document.body.addEventListener('keydown', function(e) {
+    if(e.keyCode === 78) { // n
+      e.preventDefault();
+      document.body.querySelectorAll("[role=note]").forEach((n) => {
+        n.classList.toggle("display");
+      });
+    }
+  });
+  $if(display-notes)$
+  document.body.querySelectorAll("[role=note]").forEach((n) => {
+    n.classList.add("display");
+  });
+  $endif$
+
 
 </script>
 

@@ -66,12 +66,13 @@ test = do
 
 ---
 
-# Title that should be centered but is not because of notes
+# Titles are centered correctly even in the presence of notes
 
 ::: notes
 | notes that are displayed because the right flag is added to the pandoc
 | invocation. The leading `|` character allows to preserve line breaks,
-| that's convenient in notes
+| that's convenient in notes.
+| notes can be toggled with `n`
 :::
 
 ---
